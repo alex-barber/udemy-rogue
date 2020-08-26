@@ -20,6 +20,10 @@ class World {
     return this.entities[0];
   }
 
+  add(entity) {
+    this.entities.push(entity);
+  }
+
   moveToSpace(entity) {
     for (let x = entity.x; x < this.width; x++) {
       for (let y = entity.y; y < this.height; y++) {
@@ -45,6 +49,13 @@ class World {
   movePlayer(dx, dy) {
     let tempPlayer = this.player.copyPlayer();
     tempPlayer.move(dx, dy);
+    let entity = this.getEntityAtLocation(tempPlayer.x, tempPlayer.y);
+    console.log('ENTITY', entity);
+    if (entity) {
+      console.log(entity)
+      entity.action('bump', this)
+      return;
+    }
     if (this.isWall(tempPlayer.x, tempPlayer.y)) {
       console.log(`Way blocked at ${tempPlayer.x}:${tempPlayer.y}`);
     } else {
@@ -84,7 +95,17 @@ class World {
         if (this.worldmap[x][y] === 1) this.drawWall(context, x, y);
       }
     }
-    this.entities.forEach(entity => entity.draw(context));
+    this.entities.forEach(entity => {
+      // console.log(entity);
+      entity.draw(context);
+    });
+  }
+
+  getEntityAtLocation(x, y) {
+    // console.log(x,y, this.entities)
+    return this.entities.find(entity => {
+      return entity.x === x && entity.y === y;
+    });
   }
 
   drawWall(context, x, y) {

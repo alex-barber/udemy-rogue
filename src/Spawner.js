@@ -1,4 +1,23 @@
 import Loot from './Loot';
+import Monster from './Monster';
+import Stairs from './Stairs';
+
+const monsterTable = [
+  {
+    name: 'Goblin',
+    color: 'green',
+    ascii: 'g',
+    offset: { x: 3, y: 2 },
+    health: 2,
+  },
+  {
+    name: 'Orc',
+    color: 'red',
+    ascii: 'O',
+    offset: { x: 2, y: 2 },
+    health: 6,
+  },
+];
 
 const lootTable = [
   { name: 'Long Sword', color: 'darkgrey', ascii: '/', offset: { x: 6, y: 3 } },
@@ -28,12 +47,33 @@ class Spawner {
   spawnLoot(spawnCount) {
     this.spawn(spawnCount, () => {
       return new Loot(
-        getRandomInt(this.world.width),
-        getRandomInt(this.world.height),
+        getRandomInt(this.world.width - 1),
+        getRandomInt(this.world.height - 1),
         this.world.tilesize,
         lootTable[getRandomInt(lootTable.length)]
       );
     });
+  }
+
+  spawnMonsters(spawnCount) {
+    this.spawn(spawnCount, () => {
+      return new Monster(
+        getRandomInt(this.world.width - 1),
+        getRandomInt(this.world.height - 1),
+        this.world.tilesize,
+        monsterTable[getRandomInt(monsterTable.length)]
+      );
+    });
+  }
+
+  spawnStairs() {
+    let stairs = new Stairs(
+      this.world.width - 10,
+      this.world.height - 10,
+      this.world.tilesize
+    );
+    this.world.add(stairs);
+    this.world.moveToSpace(stairs);
   }
 }
 
@@ -41,5 +81,4 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-
-export default Spawner
+export default Spawner;

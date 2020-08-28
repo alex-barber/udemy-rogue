@@ -1,6 +1,7 @@
 import Entity from './Entity';
 
 class Player extends Entity {
+  inventory = []
   attributes = {
     name: 'Player',
     ascii: '@',
@@ -11,6 +12,12 @@ class Player extends Entity {
   move(dx, dy) {
     this.x += dx;
     this.y += dy;
+  }
+
+
+
+  add(item){
+    this.inventory.push(item)
   }
 
   copyPlayer() {
